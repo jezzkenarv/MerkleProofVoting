@@ -1,10 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './merkle.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { MerkleModule } from './merkle/merkle.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'sqlite', // or your preferred database
+      database: 'merkle-voting.db',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // Set to false in production
+    }),
+    MerkleModule,
+  ],
 })
 export class AppModule {}
