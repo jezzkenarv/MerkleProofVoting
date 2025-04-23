@@ -49,7 +49,7 @@ describe("BallotFactory", async () => {
       keccak256,
       { sortPairs: true }
     );
-    const merkleRoot2 = merkleTree1.getHexRoot();
+    const merkleRoot2 = merkleTree2.getHexRoot();
 
     // Deploy the BallotFactory contract
     const result = await viem.deployContract("BallotFactory");
@@ -67,12 +67,14 @@ describe("BallotFactory", async () => {
       merkleTree1,
       merkleRoot1,
       merkleTree2,
-      merkleRoot2
+      merkleRoot2,
+      whitelist1,
+      whitelist2
     };
   }
 
 
-// pass
+  // pass
   describe("when the contract is deployed", async () => {
     it("should have zero ballots initially", async () => {
       const { contractAddress, publicClient } = await loadFixture(deployBallotFactory);
@@ -95,7 +97,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// pass
+  // pass
   describe("when creating a new ballot", async () => {
     it("should store the ballot with the correct merkle root and proposals", async () => {
       const { contractAddress, publicClient, deployer, merkleRoot1 } = await loadFixture(deployBallotFactory);
@@ -157,7 +159,7 @@ describe("BallotFactory", async () => {
       expect(proposalNames).to.deep.equal(BALLOT1_PROPOSALS);
     });
 
-// pass
+    // pass
     it("should create multiple ballots with different parameters", async () => {
       const { contractAddress, publicClient, deployer, merkleRoot1, merkleRoot2 } =
         await loadFixture(deployBallotFactory);
@@ -222,7 +224,7 @@ describe("BallotFactory", async () => {
       expect(ballotCount).to.equal(2n);
     });
   });
-// pass
+  // pass
   describe("when voting in a ballot", async () => {
     it("should allow a whitelisted voter to vote", async () => {
       const { contractAddress, publicClient, deployer, voter1, merkleRoot1, merkleTree1 } =
@@ -322,7 +324,7 @@ describe("BallotFactory", async () => {
       expect(hasVoted).to.be.true;
     });
 
-// FAILED, TODO
+    // pass
     it("should prevent double voting in the same ballot", async () => {
       const { contractAddress, publicClient, deployer, voter1, merkleRoot1, merkleTree1 } =
         await loadFixture(deployBallotFactory);
@@ -346,7 +348,7 @@ describe("BallotFactory", async () => {
         args: [merkleRoot1, BALLOT1_PROPOSALS]
       });
 
-      await publicClient.waitForTransactionReceipt({ hash: hash1 });
+      await publicClient.waitForTransactionReceipt({ hash });
 
       // Generate merkle proof for voter1
       const leaf = keccak256(voter1.account.address);
@@ -397,9 +399,9 @@ describe("BallotFactory", async () => {
       ).to.be.rejectedWith("Already voted in this ballot");
     });
 
-// FAILED, TODO
+    // FAILED, TODO
     it("should allow voting in different ballots if whitelisted", async () => {
-      const { contractAddress, publicClient, deployer, voter2, merkleRoot1, merkleRoot2, merkleTree1, merkleTree2 } =
+      const { contractAddress, publicClient, deployer, voter2, merkleRoot1, merkleRoot2, merkleTree1, merkleTree2, whitelist1, whitelist2 } =
         await loadFixture(deployBallotFactory);
 
       // Create two ballots
@@ -444,9 +446,13 @@ describe("BallotFactory", async () => {
       await publicClient.waitForTransactionReceipt({ hash: hash2 });
 
       // Generate merkle proofs for voter2 (whitelisted in both ballots)
-      const leaf = keccak256(voter2.account.address);
-      const proof1 = merkleTree1.getHexProof(leaf);
-      const proof2 = merkleTree2.getHexProof(leaf);
+      const leaf2 = keccak256(voter2.account.address);
+      const proof1 = merkleTree1.getHexProof(leaf2);
+      const proof2 = merkleTree2.getHexProof(leaf2);
+      console.log("Leaf for voter2:", leaf2.toString('hex'));
+      console.log("Proof for voter2 in ballot2:", proof2);
+      console.log("Voter2 address:", voter2.account.address);
+      console.log("Whitelist2:", whitelist2);
 
       // Vote in ballot 0
       const hash3 = await voter2.writeContract({
@@ -533,7 +539,7 @@ describe("BallotFactory", async () => {
       expect(voteCount2).to.equal(1n);
     });
 
-// pass
+    // pass
     it("should reject non-whitelisted addresses", async () => {
       const { contractAddress, publicClient, deployer, nonWhitelisted, merkleRoot1, merkleTree1 } =
         await loadFixture(deployBallotFactory);
@@ -587,7 +593,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// pass
+  // pass
   describe("when closing a ballot", async () => {
     it("should prevent voting in a closed ballot", async () => {
       const { contractAddress, publicClient, deployer, voter1, merkleRoot1, merkleTree1 } =
@@ -660,7 +666,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// FAILED, TODO
+  // FAILED, TODO
   describe("when multiple voters participate across ballots", async () => {
     it("should accurately track votes across multiple ballots", async () => {
       const {
@@ -971,7 +977,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// pass
+  // pass
   describe("when trying to access invalid ballots", async () => {
     it("should revert when accessing a non-existent ballot", async () => {
       const { contractAddress, publicClient, voter1 } = await loadFixture(deployBallotFactory);
@@ -1018,7 +1024,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// pass
+  // pass
   describe("when voting for invalid proposals", async () => {
     it("should revert when voting for a non-existent proposal", async () => {
       const { contractAddress, publicClient, deployer, voter1, merkleRoot1, merkleTree1 } =
@@ -1073,7 +1079,7 @@ describe("BallotFactory", async () => {
     });
   });
 
-// pass
+  // pass
   describe("when creating a ballot with empty proposals", async () => {
     it("should revert when trying to create a ballot with no proposals", async () => {
       const { contractAddress, deployer, merkleRoot1 } = await loadFixture(deployBallotFactory);
