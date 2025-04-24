@@ -236,6 +236,8 @@ export class MerkleService {
     if (ballotId >= Number(ballotCount)) {
       throw new Error(`Ballot ${ballotId} does not exist`);
     }
+
+
     
     // Get proposal names
     const proposalNames = await this.publicClient.readContract({
@@ -271,6 +273,7 @@ export class MerkleService {
       isActive,
       whitelistCount,
     };
+
   }
 
   /**
@@ -359,4 +362,6 @@ export class MerkleService {
     
     return true;
   }
+
+
 }
