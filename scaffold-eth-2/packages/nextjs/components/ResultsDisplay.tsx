@@ -1,3 +1,12 @@
+// Component designed to visualize the voting results from the ballot system 
+// Takes in 2 props:
+// proposalNames: An array of strings representing the names of the proposals
+// voteCounts: An array of numbers representing the votes each proposal received
+// With the votes: Calculates the total number of votes cast, determines the winning proposal, and calculates the percentage of total votes for each proposal
+// UI: shows a msg when no votes have been cast and displays voting statistics when there are votes present
+// Visually: Creates a progress bar for each proposal, the width of each bar corresponds to the percentage of votes received, highlights the winning proposal with a different color (primary vs. secondary)
+
+
 import { Card } from "./Card";
 
 interface ResultsDisplayProps {

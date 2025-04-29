@@ -1,3 +1,11 @@
+// Next.js API route handler that creates a backend endpoint for fetching ballot info
+// Request handling: API endpoints that only accepts GET requests and rejects any other HTTP methods with a 405 Method Not Allowed error
+// Extracts the ballot ID from the request query parameters and validates that the ID exists and is not an array
+// It forwards the request to another server (defined by NEXT_PUBLIC_API_URL environment variable) and specifically targets the /merkle/ballot/${id} endpoint on that server
+
+// Part of the application's API layer - creates the /api/ballot/[id] endpoint that the frontend components use to fetch ballot information
+
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 type BallotResponse = {

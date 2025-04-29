@@ -1,3 +1,19 @@
+// The BallotFactory contract:
+// - creates and manages multiple ballots, each with its own set of proposals and a whitelist of eligible voters
+// - uses Merkle trees for efficient verification of voter eligibility
+// - tracks votes and prevents double-voting 
+
+// Functions:
+// Ballot: stores information about each ballot including proposals, votes, and voter status
+// each ballot has a Merkle root to verify voter eligibility
+// createBallot: creates a new ballot with specified proposals and a whitelist, via Merkle root
+// vote: allows whitelisted addresses to vote on proposals, with eligibility verified via Merkle proofs
+// getVoteCount: returns number of votes for a specific proposal 
+// hasVoted: checks if an address already voted
+// getProposalNames: returns the name of proposals for a ballot
+// closeBallot: deactivates ballot to prevent further voting
+// updateMerkleRoot: updates the MerkleRoot generated from voter whitelist after a ballot creation -> prevents cases where address is inaccurately verified due to using old Merkle Root
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -9,7 +25,7 @@ contract BallotFactory {
         string[] proposalNames; // Names of the proposals
         mapping(uint256 => uint256) proposalVotes; // Votes per proposal
         mapping(address => bool) hasVoted; // Track who has voted
-        bool active; // Is this ballot still active?
+        bool active; // if the ballot is active or not
     }
 
     mapping(uint256 => Ballot) public ballots;
@@ -83,8 +99,8 @@ contract BallotFactory {
         ballots[ballotId].active = false;
         emit BallotClosed(ballotId);
     }
+    
     // Updates the merkle root after a ballot has been created
-
     function updateMerkleRoot(uint256 ballotId, bytes32 newMerkleRoot) external {
         require(ballotId < ballotCount, "Ballot does not exist");
         ballots[ballotId].merkleRoot = newMerkleRoot;

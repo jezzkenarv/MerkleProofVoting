@@ -1,3 +1,10 @@
+// BallotFactoryTests
+// Initial state test: verifies that the contract starts with zero votes
+// Ballot creation tests: makes sure ballots are stored with correct merkle root and proposal names + the contract can handle multiple ballots with differing parameters
+// Voting tests: whitelisted voter voting, double voting prevention, cross-ballot voting, reverts when non-whitelisted voters vote
+// Ballot management tests: voting in closed ballots is prevented, multiple voter participation
+// Error handling: invalid ballot access, invalid proposal access, empty proposal creation
+
 import { expect } from "chai";
 import { toHex, hexToString } from "viem";
 import { viem } from "hardhat";

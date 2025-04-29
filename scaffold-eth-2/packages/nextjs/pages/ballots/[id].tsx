@@ -1,4 +1,26 @@
-// Ballot details
+// Component that displays detailed info about a specific ballot in the voting app
+
+// Creates a dynamic page that displays ballot details based on the ballot ID from the URL
+// Uses getServerSideProps to extract and validate the ballot ID from URL parameters during server-side rendering
+
+// uses `useScaffoldReadContract` to get proposal names from the smart contract
+// Fetches additonal ballot info from the API endpoint
+
+// UI:
+// Displays a loading spinner while data is being fetched
+// Shows appropriate error messages if something goes wrong
+// When data is loaded, presents a two-column layout on larger screens:
+// Left column: Lists all proposals with their current vote counts
+// Right column: Contains the VotingForm component and ballot metadata
+
+// This integrates with the VotingForm component to allow eligible users to vote
+// Shows ballot status (active or closed)
+// Displays the number of whitelisted addresses
+// Provides a button to view detailed voting results on a separate page
+
+// This is the main interface for users to view ballot details and participate in voting
+
+
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

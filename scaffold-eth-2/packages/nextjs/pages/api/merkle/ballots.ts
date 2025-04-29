@@ -1,3 +1,20 @@
+// Next.js API route handler that fetches a list of all available ballots from the backend
+// Sets up the /api/merkle/ballots endpoint in Next.js app and only accepts GET requests
+
+// Backend communication:
+// Acts as a proxy between frontend and backend 
+// Makes a request to ${apiUrl}/merkle/ballots on backend server
+// The backend queries database or blockchain for all active ballots
+
+// Returns a structured JSON response containing:
+// success: Boolean indicating if the request was successful
+// data: An array of ballot objects (when successful)
+// message: Error information (when unsuccessful)
+
+// This is the entry point for the app's ballot listing feature
+// It is used by the component that displays all available ballots to users, allowing them to select which ballot they want to participate in
+
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 type BallotListResponse = {

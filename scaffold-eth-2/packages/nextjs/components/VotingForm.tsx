@@ -1,3 +1,24 @@
+// User interface that handles checking voter eligibility using Merkle proofs, displaying appropriate UI based on user's status, submitting votes onto the blockchain
+// Props: ballotId and proposalNames 
+// Components maintain state for selected proposal, merkle proof data, voter eligibility status, loading states and errors
+// useScaffoldReadContract: used to check if user has already voted
+// useScaffoldWriteContract: submits votes onto the blockchain
+
+// User eligibility flow: when a user connects their wallet, the component fetches their merkle proofs from an API endpoint
+// the API verifies if the address is whitelisted for that specific ballot
+// if eligible, vote options are displayed
+
+// Voting process: user selects a proposal
+// on submission, the component calls the vote function on the smart contract
+// the function passes the ballot ID, selected proposal, and merkle proof to verify eligibility
+
+// Conditional UI: component shows different interfaces based on user status 
+// Loading spinner while checking eligibility
+// "Connect wallet" prompt for disconnected users
+// "Already voted" message for users who have voted
+// "Not eligible" message for non-whitelisted addresses
+// Voting interface for eligible voters who haven't voted yet
+
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";

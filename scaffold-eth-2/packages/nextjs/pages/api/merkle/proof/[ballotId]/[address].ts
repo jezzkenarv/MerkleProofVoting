@@ -1,3 +1,18 @@
+// Next.js API route handler that fetches Merkle proof that verifies user voting eligibility
+// Creates the API endpoint /api/merkle/proof/[ballotId]/[address] and only accepts GET requests
+// Extracts two parameters from the URL: `ballotId`, the ID of the ballot to check eligibility for and `address`, the wallet address to verify
+// Acts as a proxy to another API (specified by the NEXT_PUBLIC_API_URL environment variable) and makes a request to ${apiUrl}/merkle/proof/${ballotId}/${address}
+// This endpoint generates/retrieves the Merkle proof for the given address
+
+// Returns a structured JSON response containing:
+// proof: An array of strings representing the Merkle proof
+// merkleRoot: The Merkle root hash for verification
+// isWhitelisted: A boolean indicating if the address is eligible to vote
+
+// When a user tries to vote, the frontend fetches this proof and passes it to the smart contract, which can then verify the user's eligibility w/o needing to trust the frontend
+
+
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ProofResponse = {

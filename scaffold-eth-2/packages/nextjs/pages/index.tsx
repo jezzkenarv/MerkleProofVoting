@@ -1,3 +1,17 @@
+// Home page
+// Creates the main landing page that displays all available ballots
+
+// Defines a Ballot interface to type the data structure
+// Uses React's useState to manage ballots, loading state, and potential errors
+// Fetches the list of all ballots from API endpoint when the component mounts
+
+// Each ballot is displayed as a clickable card
+// Shows the ballot number, whitelist count, and number of proposals
+// Lists up to 3 proposal names with a "+X more" indicator if there are additional proposals
+// Uses Next.js Link component to make each card navigate to the ballot details page
+
+// This is the entry point for the voting app 
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { MetaHeader } from "~~/components/MetaHeader";

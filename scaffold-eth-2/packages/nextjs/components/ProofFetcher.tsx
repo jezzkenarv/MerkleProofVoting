@@ -1,3 +1,30 @@
+// Component that is responsible for checking whether a user is eligible to vote in a specific ballot by fetching their merkle proofs from an API endpoint
+// Fetch a user's Merkle proof for a specific ballot
+// Determine if they're eligible to vote
+// Display appropriate feedback based on their status
+// Pass the proof data back to its parent component
+
+// Props: 
+// ballotId: The ID of the ballot to check eligibility for
+// onProofFetched: A callback function that returns the proof data and eligibility status to the parent component
+
+// useAccount (Wagmi): accesses the user's blockchain wallet address and connection status
+
+// API Integration:
+// Makes a request to API endpoint (/api/merkle/proof/${ballotId}/${address})
+// This endpoint checks if the user's address is in the Merkle tree for the specified ballot
+// Returns a proof array if the user is whitelisted
+
+// State management:
+// Tracks loading state during API calls
+// Manages error messages
+// Maintains the user's eligibility status ("eligible", "not-eligible", or "unknown")
+
+// When proof data is received, the component calls onProofFetched to pass the data back to its parent
+// This allows the parent component (VotingForm) to use the proof data when submitting votes
+
+
+
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { Spinner } from "./Spinner";
